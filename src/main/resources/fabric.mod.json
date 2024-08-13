@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "worldedit-bridge",
+	"version": "${version}",
+	"name": "WorldEdit Bridge",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Crazy_H",
+		"carpetmod112"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "LGPL-3.0-or-later",
+	"icon": "assets/carpet-extension/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"preLaunch": [
+			"webridge.WorldEditBridge::init"
+		]
+	},
+	"mixins": [
+		"worldedit-bridge.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.13.3",
+		"minecraft": "1.12.2"
+	}
+}
