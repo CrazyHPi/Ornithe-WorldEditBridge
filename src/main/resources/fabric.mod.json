@@ -23,6 +23,7 @@
 	"mixins": [
 		"worldedit-bridge.mixins.json"
 	],
+	"accessWidener": "worldedit-bridge.accesswidener",
 	"depends": {
 		"fabricloader": ">=0.13.3",
 		"minecraft": "1.12.2"

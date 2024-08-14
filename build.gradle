@@ -26,6 +26,10 @@ configurations {
     implementation.extendsFrom shadow
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/worldedit-bridge.accesswidener")
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 //    mappings ploceus.featherMappings(project.feather_build)
