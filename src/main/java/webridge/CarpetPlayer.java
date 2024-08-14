@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SPacketCustomPayload;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
@@ -144,6 +145,10 @@ class CarpetPlayer extends AbstractPlayerActor {
 
     @Override
     public boolean hasPermission(String perm) {
+        // no reason to check perm in SP
+        if (WorldEditBridge.minecraftServer instanceof IntegratedServer) {
+            return true;
+        }
         int opLevel = WorldEditBridge.minecraftServer.getPlayerList().getOppedPlayers().getPermissionLevel(player.getGameProfile());
         int requiredOpLevel = CarpetWorldEdit.inst.getConfig().getPermissionLevel(perm);
         return opLevel >= requiredOpLevel;
