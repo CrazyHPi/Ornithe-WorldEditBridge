@@ -3,6 +3,7 @@
 	"minVersion": "0.8",
 	"package": "webridge.mixins",
 	"compatibilityLevel": "JAVA_8",
+	"plugin": "webridge.mixinplugin.WorldEditBridgePlugin",
 	"mixins": [
 		"MinecraftServerMixin",
 		"accessors.ChunkProviderServerAccessor"
