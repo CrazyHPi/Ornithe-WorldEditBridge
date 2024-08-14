@@ -54,24 +54,27 @@ public class WorldEditBridge {
     }
 
     public static boolean onLeftClickBlock(World world, BlockPos pos, EntityPlayerMP player) {
-        if (worldEditEnabled())
+        if (worldEditEnabled()) {
             return CarpetWorldEdit.inst.onLeftClickBlock(world, pos, player);
-        else
+        } else {
             return true;
+        }
     }
 
     public static boolean onRightClickBlock(World world, BlockPos pos, EntityPlayerMP player) {
-        if (worldEditEnabled())
+        if (worldEditEnabled()) {
             return CarpetWorldEdit.inst.onRightClickBlock(world, pos, player);
-        else
+        } else {
             return true;
+        }
     }
 
     public static boolean onRightClickAir(World world, EntityPlayerMP player) {
-        if (worldEditEnabled())
+        if (worldEditEnabled()) {
             return CarpetWorldEdit.inst.onRightClickAir(world, player);
-        else
+        } else {
             return true;
+        }
 
     }
 
