@@ -21,7 +21,6 @@ public class WorldEditBridge {
     public static boolean worldEditPresent;
 
     public static void init() {
-        System.out.println("WorldEdit Bridge Loaded");
         try {
             Class.forName("com.sk89q.worldedit.WorldEdit");
             worldEditPresent = true;
@@ -30,8 +29,11 @@ public class WorldEditBridge {
         }
     }
 
-    public static void onServerLoaded(MinecraftServer server) {
+    public static void loadMinecraftServer(MinecraftServer server) {
         WorldEditBridge.minecraftServer = server;
+    }
+
+    public static void onServerLoaded(MinecraftServer server) {
         if (worldEditPresent) {
             CarpetWorldEdit.inst.onServerLoaded(server);
         }

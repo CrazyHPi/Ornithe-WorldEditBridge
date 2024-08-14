@@ -1,16 +1,23 @@
 {
-	"required": true,
-	"minVersion": "0.8",
-	"package": "webridge.mixins",
-	"compatibilityLevel": "JAVA_8",
-	"plugin": "webridge.mixinplugin.WorldEditBridgePlugin",
-	"mixins": [
-		"MinecraftServerMixin",
-		"accessors.ChunkProviderServerAccessor"
-	],
-	"server": [
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "minVersion": "0.8",
+  "package": "webridge.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "minMixinExtrasVersion": "0.5.0-beta.2",
+  "plugin": "webridge.mixinplugin.WorldEditBridgePlugin",
+  "mixins": [
+    "accessors.ChunkProviderServerAccessor",
+    "events.CommandHandlerMixin",
+    "events.MinecraftServerMixin",
+    "events.NetHandlerPlayServerMixin",
+    "events.PlayerInteractionManagerMixin"
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "events.IntegratedServerMixin"
+  ]
 }
