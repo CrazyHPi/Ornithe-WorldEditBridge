@@ -42,7 +42,7 @@ public abstract class CommandFillMixin {
                     target = "Lnet/minecraft/world/World;destroyBlock(Lnet/minecraft/util/math/BlockPos;Z)Z"
             )
     )
-    private void preDestroy(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local(name = "blockPos5") BlockPos blockPos5) {
+    private void preDestroy(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local(ordinal = 4) BlockPos blockPos5) {
         WorldEditBridge.recordBlockEdit(worldEditPlayer, world, blockPos5, Blocks.AIR.getDefaultState(), worldEditTag);
         CapturedDrops.setCapturingDrops(true);
     }
@@ -71,7 +71,7 @@ public abstract class CommandFillMixin {
                     ordinal = 0
             )
     )
-    private void recordBlockEditHollow(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local(name = "blockPos5") BlockPos blockPos5) {
+    private void recordBlockEditHollow(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local(ordinal = 4) BlockPos blockPos5) {
         WorldEditBridge.recordBlockEdit(worldEditPlayer, world, blockPos5, Blocks.AIR.getDefaultState(), worldEditTag);
     }
 
@@ -83,7 +83,7 @@ public abstract class CommandFillMixin {
                     ordinal = 0
             )
     )
-    private void recordBlockEdit(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local(name = "blockPos5") BlockPos blockPos5, @Local IBlockState iBlockState) {
+    private void recordBlockEdit(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local(ordinal = 4) BlockPos blockPos5, @Local IBlockState iBlockState) {
         WorldEditBridge.recordBlockEdit(worldEditPlayer, world, blockPos5, iBlockState, worldEditTag);
     }
 }

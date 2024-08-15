@@ -24,7 +24,7 @@ public abstract class CommandCloneMixin {
                     ordinal = 1
             )
     )
-    private void recordBlockEdit1(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local(name = "blockPos7") BlockPos blockPos7) {
+    private void recordBlockEdit1(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local(ordinal = 1) BlockPos blockPos7) {
         EntityPlayerMP worldEditPlayer = sender instanceof EntityPlayerMP ? (EntityPlayerMP) sender : null;
         WorldEditBridge.recordBlockEdit(worldEditPlayer, world, blockPos7, Blocks.AIR.getDefaultState(), null);
     }
@@ -40,6 +40,5 @@ public abstract class CommandCloneMixin {
     private void recordBlockEdit2(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, @Local World world, @Local CommandClone.StaticCloneData staticCloneData) {
         EntityPlayerMP worldEditPlayer = sender instanceof EntityPlayerMP ? (EntityPlayerMP) sender : null;
         WorldEditBridge.recordBlockEdit(worldEditPlayer, world, staticCloneData.pos, staticCloneData.blockState, staticCloneData.nbt);
-
     }
 }

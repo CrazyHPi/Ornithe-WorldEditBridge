@@ -19,16 +19,43 @@ public abstract class CommandHandlerMixin {
     boolean weEnabledPre;
     boolean nonWorldEditCommand;
 
-    @Definition(id = "j", local = @Local(type = int.class, name = "j"))
-    @Expression("j > -1")
-    @Inject(method = "executeCommand", at = @At("MIXINEXTRAS:EXPRESSION"))
+//    @Definition(id = "j", local = @Local(type = int.class, name = "j"))
+//    @Expression("j > -1")
+//    @Inject(method = "executeCommand", at = @At("MIXINEXTRAS:EXPRESSION"))
+//    private void onCommand(ICommandSender sender, String rawCommand, CallbackInfoReturnable<Integer> cir, @Local ICommand iCommand, @Local String[] strings) {
+//        WorldEditBridge.onCommand(iCommand, sender, strings);
+//    }
+
+    @Inject(
+            method = "executeCommand",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/command/CommandHandler;tryExecute(Lnet/minecraft/command/ICommandSender;[Ljava/lang/String;Lnet/minecraft/command/ICommand;Ljava/lang/String;)Z"
+            )
+    )
     private void onCommand(ICommandSender sender, String rawCommand, CallbackInfoReturnable<Integer> cir, @Local ICommand iCommand, @Local String[] strings) {
         WorldEditBridge.onCommand(iCommand, sender, strings);
     }
 
-    @Definition(id = "i", local = @Local(type = int.class, name = "i"))
-    @Expression("i = 0")
-    @Inject(method = "executeCommand", at = @At("MIXINEXTRAS:EXPRESSION"))
+//    @Definition(id = "i", local = @Local(type = int.class, name = "i"))
+//    @Expression("i = 0")
+//    @Inject(method = "executeCommand", at = @At("MIXINEXTRAS:EXPRESSION"))
+//    private void startEditSession(ICommandSender sender, String rawCommand, CallbackInfoReturnable<Integer> cir, @Local ICommand iCommand) {
+//        worldEditPlayer = sender instanceof EntityPlayerMP ? (EntityPlayerMP) sender : null;
+//        weEnabledPre = WorldEditBridge.worldEditEnabled();
+//        nonWorldEditCommand = iCommand != null && !iCommand.getClass().getName().startsWith("webridge");
+//        if (nonWorldEditCommand) {
+//            WorldEditBridge.startEditSession(worldEditPlayer);
+//        }
+//    }
+
+    @Inject(
+            method = "executeCommand",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/command/CommandHandler;getUsernameIndex(Lnet/minecraft/command/ICommand;[Ljava/lang/String;)I"
+            )
+    )
     private void startEditSession(ICommandSender sender, String rawCommand, CallbackInfoReturnable<Integer> cir, @Local ICommand iCommand) {
         worldEditPlayer = sender instanceof EntityPlayerMP ? (EntityPlayerMP) sender : null;
         weEnabledPre = WorldEditBridge.worldEditEnabled();
@@ -39,7 +66,7 @@ public abstract class CommandHandlerMixin {
     }
 
     @Inject(method = "executeCommand", at = @At("RETURN"))
-    private void finishEditSession(ICommandSender sender, String rawCommand, CallbackInfoReturnable<Integer> cir){
+    private void finishEditSession(ICommandSender sender, String rawCommand, CallbackInfoReturnable<Integer> cir) {
         if (nonWorldEditCommand && weEnabledPre) {
             WorldEditBridge.finishEditSession(worldEditPlayer);
         }
