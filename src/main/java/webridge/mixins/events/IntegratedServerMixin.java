@@ -13,5 +13,6 @@ public abstract class IntegratedServerMixin {
     @Inject(method = "loadAllWorlds", at = @At("HEAD"))
     private void onServerLoaded(CallbackInfo ci) {
         WorldEditBridge.onServerLoaded((MinecraftServer) (Object) this);
+        WorldEditBridge.isIntegratedServer = true;
     }
 }

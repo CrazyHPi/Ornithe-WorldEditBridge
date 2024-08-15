@@ -12,6 +12,7 @@ public abstract class MinecraftServerMixin {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void loadServer(CallbackInfo ci) {
         WorldEditBridge.loadMinecraftServer((MinecraftServer) (Object) this);
+        WorldEditBridge.isIntegratedServer = false;
     }
 
     @Inject(method = "loadAllWorlds", at = @At("HEAD"))

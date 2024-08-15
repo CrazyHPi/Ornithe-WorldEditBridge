@@ -1,6 +1,5 @@
 package webridge;
 
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -11,14 +10,13 @@ import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import webridge.network.PluginChannelHandler;
-
 
 public class WorldEditBridge {
     public static final String VERSION = "1.0.0";
 
     public static MinecraftServer minecraftServer;
     public static boolean worldEditPresent;
+    public static boolean isIntegratedServer;
 
     public static void init() {
         try {
@@ -115,19 +113,4 @@ public class WorldEditBridge {
             CarpetWorldEdit.inst.recordEntityRemoval(player, world, removed);
         }
     }
-
-    public static PluginChannelHandler createChannelHandler() {
-        return new PluginChannelHandler() {
-            @Override
-            public String[] getChannels() {
-                return new String[]{CarpetWorldEdit.CUI_PLUGIN_CHANNEL};
-            }
-
-            @Override
-            public void onCustomPayload(CPacketCustomPayload packet, EntityPlayerMP player) {
-                WorldEditBridge.onCustomPayload(packet, player);
-            }
-        };
-    }
-
 }
