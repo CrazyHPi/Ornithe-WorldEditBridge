@@ -9,7 +9,7 @@ class CarpetConfiguration extends PropertiesConfiguration {
     public CarpetConfiguration(File path) {
         super(path);
     }
-    
+
     public int getPermissionLevel(String perm) {
         String val = properties.getProperty("permission." + perm, "2");
         try {

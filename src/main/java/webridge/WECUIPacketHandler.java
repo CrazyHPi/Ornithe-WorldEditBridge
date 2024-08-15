@@ -17,7 +17,7 @@ class WECUIPacketHandler {
             if (session.hasCUISupport()) {
                 return;
             }
-        
+
             PacketBuffer buff = rawPacket.getBufferData();
             buff.resetReaderIndex();
             byte[] bytes = new byte[buff.readableBytes()];

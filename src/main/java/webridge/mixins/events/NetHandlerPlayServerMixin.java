@@ -14,7 +14,8 @@ import webridge.WorldEditBridge;
 
 @Mixin(NetHandlerPlayServer.class)
 public abstract class NetHandlerPlayServerMixin {
-    @Shadow public EntityPlayerMP player;
+    @Shadow
+    public EntityPlayerMP player;
 
     @Inject(
             method = "processTryUseItem",

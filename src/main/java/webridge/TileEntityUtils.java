@@ -23,7 +23,7 @@ final class TileEntityUtils {
     /**
      * Update the given tag compound with position information.
      *
-     * @param tag the tag
+     * @param tag      the tag
      * @param position the position
      * @return a tag compound
      */
@@ -41,10 +41,10 @@ final class TileEntityUtils {
     /**
      * Set a tile entity at the given location.
      *
-     * @param world the world
+     * @param world    the world
      * @param position the position
-     * @param clazz the tile entity class
-     * @param tag the tag for the tile entity (may be null to not set NBT data)
+     * @param clazz    the tile entity class
+     * @param tag      the tag for the tile entity (may be null to not set NBT data)
      */
     static void setTileEntity(World world, Vector position, Class<? extends TileEntity> clazz, @Nullable NBTTagCompound tag) {
         checkNotNull(world);
@@ -70,9 +70,9 @@ final class TileEntityUtils {
      * Set a tile entity at the given location using the tile entity ID from
      * the tag.
      *
-     * @param world the world
+     * @param world    the world
      * @param position the position
-     * @param tag the tag for the tile entity (may be null to do nothing)
+     * @param tag      the tag for the tile entity (may be null to do nothing)
      */
     static void setTileEntity(World world, Vector position, @Nullable NBTTagCompound tag) {
         if (tag != null) {
@@ -87,9 +87,9 @@ final class TileEntityUtils {
     /**
      * Construct a tile entity from the given class.
      *
-     * @param world the world
+     * @param world    the world
      * @param position the position
-     * @param clazz the class
+     * @param clazz    the class
      * @return a tile entity (may be null if it failed)
      */
     @Nullable

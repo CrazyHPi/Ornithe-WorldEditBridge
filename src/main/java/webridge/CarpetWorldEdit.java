@@ -49,9 +49,9 @@ public class CarpetWorldEdit {
 
     private CarpetPlatform platform;
     private CarpetConfiguration config;
-    
+
     private boolean firstTick = true;
-    
+
     private EditSession editSession = null;
     private int sessionNestedDepth = 0;
 
@@ -60,11 +60,11 @@ public class CarpetWorldEdit {
 
         config = new CarpetConfiguration(new File("worldedit.properties").getAbsoluteFile());
         config.load();
-        
+
         CarpetBiomeRegistry.populate();
-        
+
         this.platform = new CarpetPlatform(this);
-        
+
         WorldEdit.getInstance().getPlatformManager().register(platform);
     }
 
@@ -72,7 +72,7 @@ public class CarpetWorldEdit {
         firstTick = true;
         WorldEdit.getInstance().getPlatformManager().unregister(platform);
     }
-    
+
     public void onStartTick() {
         ThreadSafeCache.getInstance().tickStart();
         if (firstTick) {
@@ -92,60 +92,60 @@ public class CarpetWorldEdit {
             WorldEdit.getInstance().getEventBus().post(weEvent);
         }
     }
-    
+
     public boolean onLeftClickBlock(World world, BlockPos pos, EntityPlayerMP player) {
         if (!platform.isHookingEvents())
             return true;
-        
+
         WorldEdit we = WorldEdit.getInstance();
         CarpetPlayer carpetPlayer = wrap(player);
         CarpetWorld carpetWorld = getWorld(world);
         WorldVector vector = new WorldVector(LocalWorldAdapter.adapt(carpetWorld), pos.getX(), pos.getY(), pos.getZ());
-        
+
         boolean result = true;
-        
+
         if (we.handleBlockLeftClick(carpetPlayer, vector))
             result = false;
-        
+
         if (we.handleArmSwing(carpetPlayer))
             result = false;
-        
+
         return result;
     }
-    
+
     public boolean onRightClickBlock(World world, BlockPos pos, EntityPlayerMP player) {
         if (!platform.isHookingEvents())
             return true;
-        
+
         WorldEdit we = WorldEdit.getInstance();
         CarpetPlayer carpetPlayer = wrap(player);
         CarpetWorld carpetWorld = getWorld(world);
         WorldVector vector = new WorldVector(LocalWorldAdapter.adapt(carpetWorld), pos.getX(), pos.getY(), pos.getZ());
-        
+
         boolean result = true;
-        
+
         if (we.handleBlockRightClick(carpetPlayer, vector))
             result = false;
-        
+
         if (we.handleRightClick(carpetPlayer))
             result = false;
-        
+
         return result;
     }
-    
+
     public boolean onRightClickAir(World world, EntityPlayerMP player) {
         if (!platform.isHookingEvents())
             return true;
-        
+
         WorldEdit we = WorldEdit.getInstance();
         CarpetPlayer carpetPlayer = wrap(player);
-        
+
         if (we.handleRightClick(carpetPlayer))
             return false;
-        
+
         return true;
     }
-    
+
     public void startEditSession(EntityPlayerMP player) {
         if (player == null)
             return;
@@ -156,17 +156,17 @@ public class CarpetWorldEdit {
             editSession = WorldEdit.getInstance().getSessionManager().get(carpetPlayer).createEditSession(carpetPlayer);
         }
     }
-    
+
     public void finishEditSession(EntityPlayerMP player) {
         if (player == null)
             return;
-        
+
         if (editSession == null) {
             throw new IllegalStateException("Not started!");
         }
-        
+
         sessionNestedDepth--;
-        
+
         if (sessionNestedDepth == 0) {
             CarpetPlayer carpetPlayer = wrap(player);
             if (editSession.getChangeSet().size() > 0)
@@ -174,17 +174,17 @@ public class CarpetWorldEdit {
             editSession = null;
         }
     }
-    
+
     public void recordBlockEdit(EntityPlayerMP player, World world, BlockPos pos, IBlockState newBlock, NBTTagCompound newTileEntity) {
         if (player == null)
             return;
-        
+
         if (editSession == null) {
             throw new IllegalStateException("Not started!");
         }
-        
+
         BlockVector position = new BlockVector(pos.getX(), pos.getY(), pos.getZ());
-        
+
         IBlockState oldBlock = world.getBlockState(pos);
         int oldBlockId = Block.getIdFromBlock(oldBlock.getBlock());
         int oldMeta = oldBlock.getBlock().getMetaFromState(oldBlock);
@@ -194,7 +194,7 @@ public class CarpetWorldEdit {
             previous = new BaseBlock(oldBlockId, oldMeta);
         else
             previous = new BaseBlock(oldBlockId, oldMeta, NBTConverter.fromNative(oldTileEntity.writeToNBT(new NBTTagCompound())));
-        
+
         int newBlockId = Block.getIdFromBlock(newBlock.getBlock());
         int newMeta = newBlock.getBlock().getMetaFromState(newBlock);
         BaseBlock current;
@@ -202,39 +202,39 @@ public class CarpetWorldEdit {
             current = new BaseBlock(newBlockId, newMeta);
         else
             current = new BaseBlock(newBlockId, newMeta, NBTConverter.fromNative(newTileEntity));
-        
+
         editSession.getChangeSet().add(new BlockChange(position, previous, current));
     }
-    
+
     public void recordEntityCreation(EntityPlayerMP player, World world, Entity created) {
         if (player == null)
             return;
-        
+
         if (editSession == null) {
             throw new IllegalStateException("Not started!");
         }
-        
+
         CarpetEntity carpetEntity = new CarpetEntity(created);
         String entityId = EntityList.getKey(created).toString();
         CompoundTag tag = NBTConverter.fromNative(created.writeToNBT(new NBTTagCompound()));
         BaseEntity baseEntity = new BaseEntity(entityId, tag);
-        
+
         editSession.getChangeSet().add(new EntityCreate(carpetEntity.getLocation(), baseEntity, carpetEntity));
     }
-    
+
     public void recordEntityRemoval(EntityPlayerMP player, World world, Entity removed) {
         if (player == null)
             return;
-        
+
         if (editSession == null) {
             throw new IllegalStateException("Not started!");
         }
-        
+
         CarpetEntity carpetEntity = new CarpetEntity(removed);
         String entityId = EntityList.getKey(removed).toString();
         CompoundTag tag = NBTConverter.fromNative(removed.writeToNBT(new NBTTagCompound()));
         BaseEntity baseEntity = new BaseEntity(entityId, tag);
-        
+
         editSession.getChangeSet().add(new EntityRemove(carpetEntity.getLocation(), baseEntity));
     }
 

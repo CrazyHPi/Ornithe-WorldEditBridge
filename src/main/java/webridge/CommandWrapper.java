@@ -27,7 +27,8 @@ class CommandWrapper extends CommandBase {
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender var1, String[] var2) {}
+    public void execute(MinecraftServer server, ICommandSender var1, String[] var2) {
+    }
 
     @Override
     public String getUsage(ICommandSender icommandsender) {

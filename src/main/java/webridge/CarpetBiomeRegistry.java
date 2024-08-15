@@ -74,7 +74,7 @@ class CarpetBiomeRegistry implements BiomeRegistry {
         private CarpetBiomeData(Biome biome) {
             this.name = getName(biome);
         }
-        
+
         private static String getName(Biome biome) {
             // Adding members to the Biome class caused strange behaviour with a switch map, so use reflection I guess
             Field nameField = null;
