@@ -39,7 +39,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The Carpet implementation of WorldEdit.
  */
 @SuppressWarnings("deprecation")
-class CarpetWorldEdit {
+public class CarpetWorldEdit {
 
     public static Logger logger;
     public static final String MOD_ID = "worldedit";

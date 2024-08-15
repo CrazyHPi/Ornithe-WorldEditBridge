@@ -11,14 +11,14 @@
     "events.MinecraftServerMixin",
     "events.NetHandlerPlayServerMixin",
     "events.PlayerInteractionManagerMixin",
-    "events.test",
     "events.record.CommandBlockDataMixin",
     "events.record.CommandCloneMixin",
     "events.record.CommandFillMixin",
     "events.record.CommandKillMixin",
     "events.record.CommandReplaceItemMixin",
     "events.record.CommandSetBlockMixin",
-    "events.record.CommandSummonMixin"
+    "events.record.CommandSummonMixin",
+    "network.NetHandlerPlayServerMixin"
   ],
   "server": [
   ],
