@@ -11,8 +11,8 @@ class WECUIPacketHandler {
     public static final Charset UTF_8_CHARSET = Charset.forName("UTF-8");
 
     public static void onCustomPayload(CPacketCustomPayload rawPacket, EntityPlayerMP player) {
-        if (rawPacket.getChannelName().equals(CarpetWorldEdit.CUI_PLUGIN_CHANNEL)) {
-            LocalSession session = CarpetWorldEdit.inst.getSession((EntityPlayerMP) player);
+        if (rawPacket.getChannelName().equals(VanillaWorldEdit.CUI_PLUGIN_CHANNEL)) {
+            LocalSession session = VanillaWorldEdit.inst.getSession((EntityPlayerMP) player);
 
             if (session.hasCUISupport()) {
                 return;

@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Provides access to biome data in Minecraft.
  */
-class CarpetBiomeRegistry implements BiomeRegistry {
+class VanillaBiomeRegistry implements BiomeRegistry {
     private static Map<Integer, Biome> biomes = Collections.emptyMap();
     private static Map<Integer, BiomeData> biomeData = Collections.emptyMap();
 
@@ -56,8 +56,8 @@ class CarpetBiomeRegistry implements BiomeRegistry {
             biomeData.put(Biome.getIdForBiome(biome), new CarpetBiomeData(biome));
         }
 
-        CarpetBiomeRegistry.biomes = biomes;
-        CarpetBiomeRegistry.biomeData = biomeData;
+        VanillaBiomeRegistry.biomes = biomes;
+        VanillaBiomeRegistry.biomeData = biomeData;
     }
 
     /**

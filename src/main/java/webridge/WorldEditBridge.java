@@ -33,13 +33,13 @@ public class WorldEditBridge {
 
     public static void onServerLoaded(MinecraftServer server) {
         if (worldEditPresent) {
-            CarpetWorldEdit.inst.onServerLoaded(server);
+            VanillaWorldEdit.inst.onServerLoaded(server);
         }
     }
 
     public static void onServerStopped(MinecraftServer server) {
         if (minecraftServer != null) {
-            CarpetWorldEdit.inst.onServerStopped(server);
+            VanillaWorldEdit.inst.onServerStopped(server);
             minecraftServer = null;
         }
     }
@@ -50,19 +50,19 @@ public class WorldEditBridge {
 
     public static void onStartTick() {
         if (worldEditPresent) {
-            CarpetWorldEdit.inst.onStartTick();
+            VanillaWorldEdit.inst.onStartTick();
         }
     }
 
     public static void onCommand(ICommand command, ICommandSender sender, String[] args) {
         if (worldEditEnabled()) {
-            CarpetWorldEdit.inst.onCommand(command, sender, args);
+            VanillaWorldEdit.inst.onCommand(command, sender, args);
         }
     }
 
     public static boolean onLeftClickBlock(World world, BlockPos pos, EntityPlayerMP player) {
         if (worldEditEnabled()) {
-            return CarpetWorldEdit.inst.onLeftClickBlock(world, pos, player);
+            return VanillaWorldEdit.inst.onLeftClickBlock(world, pos, player);
         } else {
             return true;
         }
@@ -70,7 +70,7 @@ public class WorldEditBridge {
 
     public static boolean onRightClickBlock(World world, BlockPos pos, EntityPlayerMP player) {
         if (worldEditEnabled()) {
-            return CarpetWorldEdit.inst.onRightClickBlock(world, pos, player);
+            return VanillaWorldEdit.inst.onRightClickBlock(world, pos, player);
         } else {
             return true;
         }
@@ -78,7 +78,7 @@ public class WorldEditBridge {
 
     public static boolean onRightClickAir(World world, EntityPlayerMP player) {
         if (worldEditEnabled()) {
-            return CarpetWorldEdit.inst.onRightClickAir(world, player);
+            return VanillaWorldEdit.inst.onRightClickAir(world, player);
         } else {
             return true;
         }
@@ -93,31 +93,31 @@ public class WorldEditBridge {
 
     public static void startEditSession(EntityPlayerMP player) {
         if (worldEditEnabled()) {
-            CarpetWorldEdit.inst.startEditSession(player);
+            VanillaWorldEdit.inst.startEditSession(player);
         }
     }
 
     public static void finishEditSession(EntityPlayerMP player) {
         if (worldEditEnabled()) {
-            CarpetWorldEdit.inst.finishEditSession(player);
+            VanillaWorldEdit.inst.finishEditSession(player);
         }
     }
 
     public static void recordBlockEdit(EntityPlayerMP player, World world, BlockPos pos, IBlockState newBlock, NBTTagCompound newTileEntity) {
         if (worldEditEnabled()) {
-            CarpetWorldEdit.inst.recordBlockEdit(player, world, pos, newBlock, newTileEntity);
+            VanillaWorldEdit.inst.recordBlockEdit(player, world, pos, newBlock, newTileEntity);
         }
     }
 
     public static void recordEntityCreation(EntityPlayerMP player, World world, Entity created) {
         if (worldEditEnabled()) {
-            CarpetWorldEdit.inst.recordEntityCreation(player, world, created);
+            VanillaWorldEdit.inst.recordEntityCreation(player, world, created);
         }
     }
 
     public static void recordEntityRemoval(EntityPlayerMP player, World world, Entity removed) {
         if (worldEditEnabled()) {
-            CarpetWorldEdit.inst.recordEntityRemoval(player, world, removed);
+            VanillaWorldEdit.inst.recordEntityRemoval(player, world, removed);
         }
     }
 }

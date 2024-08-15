@@ -15,11 +15,11 @@ import java.lang.ref.WeakReference;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-class CarpetEntity implements Entity {
+class VanillaEntity implements Entity {
 
     private final WeakReference<net.minecraft.entity.Entity> entityRef;
 
-    CarpetEntity(net.minecraft.entity.Entity entity) {
+    VanillaEntity(net.minecraft.entity.Entity entity) {
         checkNotNull(entity);
         this.entityRef = new WeakReference<net.minecraft.entity.Entity>(entity);
     }
@@ -49,7 +49,7 @@ class CarpetEntity implements Entity {
             float yaw = entity.rotationYaw;
             float pitch = entity.rotationPitch;
 
-            return new Location(CarpetAdapter.adapt(entity.world), position, yaw, pitch);
+            return new Location(VanillaAdapter.adapt(entity.world), position, yaw, pitch);
         } else {
             return new Location(NullWorld.getInstance());
         }
@@ -59,7 +59,7 @@ class CarpetEntity implements Entity {
     public Extent getExtent() {
         net.minecraft.entity.Entity entity = entityRef.get();
         if (entity != null) {
-            return CarpetAdapter.adapt(entity.world);
+            return VanillaAdapter.adapt(entity.world);
         } else {
             return NullWorld.getInstance();
         }
@@ -81,7 +81,7 @@ class CarpetEntity implements Entity {
         net.minecraft.entity.Entity entity = entityRef.get();
         if (entity != null) {
             if (EntityType.class.isAssignableFrom(cls)) {
-                return (T) new CarpetEntityType(entity);
+                return (T) new VanillaEntityType(entity);
             } else {
                 return null;
             }

@@ -11,11 +11,11 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-class CarpetEntityType implements EntityType {
+class VanillaEntityType implements EntityType {
 
     private final Entity entity;
 
-    public CarpetEntityType(Entity entity) {
+    public VanillaEntityType(Entity entity) {
         checkNotNull(entity);
         this.entity = entity;
     }

@@ -49,9 +49,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * An adapter to Minecraft worlds for WorldEdit.
  */
 @SuppressWarnings("deprecation")
-class CarpetWorld extends AbstractWorld {
+class VanillaWorld extends AbstractWorld {
 
-    private static final Logger logger = Logger.getLogger(CarpetWorld.class.getCanonicalName());
+    private static final Logger logger = Logger.getLogger(VanillaWorld.class.getCanonicalName());
     private final WeakReference<World> worldRef;
 
     /**
@@ -59,7 +59,7 @@ class CarpetWorld extends AbstractWorld {
      *
      * @param world the world
      */
-    CarpetWorld(World world) {
+    VanillaWorld(World world) {
         checkNotNull(world);
         this.worldRef = new WeakReference<World>(world);
     }
@@ -198,7 +198,7 @@ class CarpetWorld extends AbstractWorld {
             return;
         }
 
-        EntityItem entity = new EntityItem(getWorld(), position.getX(), position.getY(), position.getZ(), CarpetWorldEdit.toCarpetItemStack(item));
+        EntityItem entity = new EntityItem(getWorld(), position.getX(), position.getY(), position.getZ(), VanillaWorldEdit.toCarpetItemStack(item));
         entity.setDefaultPickupDelay();
         getWorld().spawnEntity(entity);
     }
@@ -317,7 +317,7 @@ class CarpetWorld extends AbstractWorld {
 
     @Override
     public WorldData getWorldData() {
-        return CarpetWorldData.getInstance();
+        return VanillaWorldData.getInstance();
     }
 
     @Override
@@ -359,8 +359,8 @@ class CarpetWorld extends AbstractWorld {
     public boolean equals(Object o) {
         if (o == null) {
             return false;
-        } else if ((o instanceof CarpetWorld)) {
-            CarpetWorld other = ((CarpetWorld) o);
+        } else if ((o instanceof VanillaWorld)) {
+            VanillaWorld other = ((VanillaWorld) o);
             World otherWorld = other.worldRef.get();
             World thisWorld = worldRef.get();
             return otherWorld != null && thisWorld != null && otherWorld.equals(thisWorld);
@@ -378,7 +378,7 @@ class CarpetWorld extends AbstractWorld {
         List<net.minecraft.entity.Entity> ents = world.loadedEntityList;
         for (net.minecraft.entity.Entity entity : ents) {
             if (region.contains(new Vector(entity.posX, entity.posY, entity.posZ))) {
-                entities.add(new CarpetEntity(entity));
+                entities.add(new VanillaEntity(entity));
             }
         }
         return entities;
@@ -388,7 +388,7 @@ class CarpetWorld extends AbstractWorld {
     public List<? extends Entity> getEntities() {
         List<Entity> entities = new ArrayList<Entity>();
         for (Object entity : getWorld().loadedEntityList) {
-            entities.add(new CarpetEntity((net.minecraft.entity.Entity) entity));
+            entities.add(new VanillaEntity((net.minecraft.entity.Entity) entity));
         }
         return entities;
     }
@@ -411,7 +411,7 @@ class CarpetWorld extends AbstractWorld {
             createdEntity.setLocationAndAngles(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 
             world.spawnEntity(createdEntity);
-            return new CarpetEntity(createdEntity);
+            return new VanillaEntity(createdEntity);
         } else {
             return null;
         }

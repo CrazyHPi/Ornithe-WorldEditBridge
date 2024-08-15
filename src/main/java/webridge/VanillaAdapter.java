@@ -2,13 +2,13 @@ package webridge;
 
 import com.sk89q.worldedit.world.World;
 
-final class CarpetAdapter {
+final class VanillaAdapter {
 
-    private CarpetAdapter() {
+    private VanillaAdapter() {
     }
 
     public static World adapt(net.minecraft.world.World world) {
-        return new CarpetWorld(world);
+        return new VanillaWorld(world);
     }
 
 }

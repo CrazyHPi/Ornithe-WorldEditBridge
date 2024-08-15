@@ -19,13 +19,13 @@ import net.minecraft.world.WorldServer;
 import javax.annotation.Nullable;
 import java.util.*;
 
-class CarpetPlatform extends AbstractPlatform implements MultiUserPlatform {
+class VanillaPlatform extends AbstractPlatform implements MultiUserPlatform {
 
-    private final CarpetWorldEdit mod;
+    private final VanillaWorldEdit mod;
     private final MinecraftServer server;
     private boolean hookingEvents = false;
 
-    CarpetPlatform(CarpetWorldEdit mod) {
+    VanillaPlatform(VanillaWorldEdit mod) {
         this.mod = mod;
         this.server = WorldEditBridge.minecraftServer;
     }
@@ -81,7 +81,7 @@ class CarpetPlatform extends AbstractPlatform implements MultiUserPlatform {
         List<WorldServer> worlds = Arrays.asList(server.worlds);
         List<com.sk89q.worldedit.world.World> ret = new ArrayList<com.sk89q.worldedit.world.World>(worlds.size());
         for (WorldServer world : worlds) {
-            ret.add(new CarpetWorld(world));
+            ret.add(new VanillaWorld(world));
         }
         return ret;
     }
@@ -89,23 +89,23 @@ class CarpetPlatform extends AbstractPlatform implements MultiUserPlatform {
     @Nullable
     @Override
     public Player matchPlayer(Player player) {
-        if (player instanceof CarpetPlayer) {
+        if (player instanceof VanillaPlayer) {
             return player;
         } else {
             EntityPlayerMP entity = server.getPlayerList().getPlayerByUsername(player.getName());
-            return entity != null ? new CarpetPlayer(entity) : null;
+            return entity != null ? new VanillaPlayer(entity) : null;
         }
     }
 
     @Nullable
     @Override
     public World matchWorld(World world) {
-        if (world instanceof CarpetWorld) {
+        if (world instanceof VanillaWorld) {
             return world;
         } else {
             for (WorldServer ws : server.worlds) {
                 if (ws.getWorldInfo().getWorldName().equals(world.getName())) {
-                    return new CarpetWorld(ws);
+                    return new VanillaWorld(ws);
                 }
             }
 
@@ -168,7 +168,7 @@ class CarpetPlatform extends AbstractPlatform implements MultiUserPlatform {
         PlayerList scm = server.getPlayerList();
         for (EntityPlayerMP entity : scm.getPlayers()) {
             if (entity != null) {
-                users.add(new CarpetPlayer(entity));
+                users.add(new VanillaPlayer(entity));
             }
         }
         return users;

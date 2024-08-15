@@ -4,9 +4,9 @@ import com.sk89q.worldedit.util.PropertiesConfiguration;
 
 import java.io.File;
 
-class CarpetConfiguration extends PropertiesConfiguration {
+class VanillaConfiguration extends PropertiesConfiguration {
 
-    public CarpetConfiguration(File path) {
+    public VanillaConfiguration(File path) {
         super(path);
     }
 

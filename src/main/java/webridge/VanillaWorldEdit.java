@@ -39,16 +39,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The Carpet implementation of WorldEdit.
  */
 @SuppressWarnings("deprecation")
-public class CarpetWorldEdit {
+public class VanillaWorldEdit {
 
     public static Logger logger;
     public static final String MOD_ID = "worldedit";
     public static final String CUI_PLUGIN_CHANNEL = "WECUI";
 
-    public static CarpetWorldEdit inst = new CarpetWorldEdit();
+    public static VanillaWorldEdit inst = new VanillaWorldEdit();
 
-    private CarpetPlatform platform;
-    private CarpetConfiguration config;
+    private VanillaPlatform platform;
+    private VanillaConfiguration config;
 
     private boolean firstTick = true;
 
@@ -58,12 +58,12 @@ public class CarpetWorldEdit {
     public void onServerLoaded(MinecraftServer server) {
         logger = LogManager.getLogger("WorldEdit");
 
-        config = new CarpetConfiguration(new File("worldedit.properties").getAbsoluteFile());
+        config = new VanillaConfiguration(new File("worldedit.properties").getAbsoluteFile());
         config.load();
 
-        CarpetBiomeRegistry.populate();
+        VanillaBiomeRegistry.populate();
 
-        this.platform = new CarpetPlatform(this);
+        this.platform = new VanillaPlatform(this);
 
         WorldEdit.getInstance().getPlatformManager().register(platform);
     }
@@ -98,16 +98,16 @@ public class CarpetWorldEdit {
             return true;
 
         WorldEdit we = WorldEdit.getInstance();
-        CarpetPlayer carpetPlayer = wrap(player);
-        CarpetWorld carpetWorld = getWorld(world);
-        WorldVector vector = new WorldVector(LocalWorldAdapter.adapt(carpetWorld), pos.getX(), pos.getY(), pos.getZ());
+        VanillaPlayer vanillaPlayer = wrap(player);
+        VanillaWorld vanillaWorld = getWorld(world);
+        WorldVector vector = new WorldVector(LocalWorldAdapter.adapt(vanillaWorld), pos.getX(), pos.getY(), pos.getZ());
 
         boolean result = true;
 
-        if (we.handleBlockLeftClick(carpetPlayer, vector))
+        if (we.handleBlockLeftClick(vanillaPlayer, vector))
             result = false;
 
-        if (we.handleArmSwing(carpetPlayer))
+        if (we.handleArmSwing(vanillaPlayer))
             result = false;
 
         return result;
@@ -118,16 +118,16 @@ public class CarpetWorldEdit {
             return true;
 
         WorldEdit we = WorldEdit.getInstance();
-        CarpetPlayer carpetPlayer = wrap(player);
-        CarpetWorld carpetWorld = getWorld(world);
-        WorldVector vector = new WorldVector(LocalWorldAdapter.adapt(carpetWorld), pos.getX(), pos.getY(), pos.getZ());
+        VanillaPlayer vanillaPlayer = wrap(player);
+        VanillaWorld vanillaWorld = getWorld(world);
+        WorldVector vector = new WorldVector(LocalWorldAdapter.adapt(vanillaWorld), pos.getX(), pos.getY(), pos.getZ());
 
         boolean result = true;
 
-        if (we.handleBlockRightClick(carpetPlayer, vector))
+        if (we.handleBlockRightClick(vanillaPlayer, vector))
             result = false;
 
-        if (we.handleRightClick(carpetPlayer))
+        if (we.handleRightClick(vanillaPlayer))
             result = false;
 
         return result;
@@ -138,9 +138,9 @@ public class CarpetWorldEdit {
             return true;
 
         WorldEdit we = WorldEdit.getInstance();
-        CarpetPlayer carpetPlayer = wrap(player);
+        VanillaPlayer vanillaPlayer = wrap(player);
 
-        if (we.handleRightClick(carpetPlayer))
+        if (we.handleRightClick(vanillaPlayer))
             return false;
 
         return true;
@@ -152,8 +152,8 @@ public class CarpetWorldEdit {
 
         sessionNestedDepth++;
         if (editSession == null) {
-            CarpetPlayer carpetPlayer = wrap(player);
-            editSession = WorldEdit.getInstance().getSessionManager().get(carpetPlayer).createEditSession(carpetPlayer);
+            VanillaPlayer vanillaPlayer = wrap(player);
+            editSession = WorldEdit.getInstance().getSessionManager().get(vanillaPlayer).createEditSession(vanillaPlayer);
         }
     }
 
@@ -168,9 +168,9 @@ public class CarpetWorldEdit {
         sessionNestedDepth--;
 
         if (sessionNestedDepth == 0) {
-            CarpetPlayer carpetPlayer = wrap(player);
+            VanillaPlayer vanillaPlayer = wrap(player);
             if (editSession.getChangeSet().size() > 0)
-                WorldEdit.getInstance().getSessionManager().get(carpetPlayer).remember(editSession);
+                WorldEdit.getInstance().getSessionManager().get(vanillaPlayer).remember(editSession);
             editSession = null;
         }
     }
@@ -214,12 +214,12 @@ public class CarpetWorldEdit {
             throw new IllegalStateException("Not started!");
         }
 
-        CarpetEntity carpetEntity = new CarpetEntity(created);
+        VanillaEntity vanillaEntity = new VanillaEntity(created);
         String entityId = EntityList.getKey(created).toString();
         CompoundTag tag = NBTConverter.fromNative(created.writeToNBT(new NBTTagCompound()));
         BaseEntity baseEntity = new BaseEntity(entityId, tag);
 
-        editSession.getChangeSet().add(new EntityCreate(carpetEntity.getLocation(), baseEntity, carpetEntity));
+        editSession.getChangeSet().add(new EntityCreate(vanillaEntity.getLocation(), baseEntity, vanillaEntity));
     }
 
     public void recordEntityRemoval(EntityPlayerMP player, World world, Entity removed) {
@@ -230,12 +230,12 @@ public class CarpetWorldEdit {
             throw new IllegalStateException("Not started!");
         }
 
-        CarpetEntity carpetEntity = new CarpetEntity(removed);
+        VanillaEntity vanillaEntity = new VanillaEntity(removed);
         String entityId = EntityList.getKey(removed).toString();
         CompoundTag tag = NBTConverter.fromNative(removed.writeToNBT(new NBTTagCompound()));
         BaseEntity baseEntity = new BaseEntity(entityId, tag);
 
-        editSession.getChangeSet().add(new EntityRemove(carpetEntity.getLocation(), baseEntity));
+        editSession.getChangeSet().add(new EntityRemove(vanillaEntity.getLocation(), baseEntity));
     }
 
     public static ItemStack toCarpetItemStack(BaseItemStack item) {
@@ -252,7 +252,7 @@ public class CarpetWorldEdit {
      *
      * @return the Properties configuration
      */
-    CarpetConfiguration getConfig() {
+    VanillaConfiguration getConfig() {
         return this.config;
     }
 
@@ -262,9 +262,9 @@ public class CarpetWorldEdit {
      * @param player the player
      * @return the WorldEdit player
      */
-    public CarpetPlayer wrap(EntityPlayerMP player) {
+    public VanillaPlayer wrap(EntityPlayerMP player) {
         checkNotNull(player);
-        return new CarpetPlayer(player);
+        return new VanillaPlayer(player);
     }
 
     /**
@@ -284,9 +284,9 @@ public class CarpetWorldEdit {
      * @param world the world
      * @return the WorldEdit world
      */
-    public CarpetWorld getWorld(World world) {
+    public VanillaWorld getWorld(World world) {
         checkNotNull(world);
-        return new CarpetWorld(world);
+        return new VanillaWorld(world);
     }
 
     /**

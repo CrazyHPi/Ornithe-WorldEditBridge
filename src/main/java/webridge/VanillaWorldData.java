@@ -6,15 +6,15 @@ import com.sk89q.worldedit.world.registry.LegacyWorldData;
 /**
  * World data for the Carpet platform.
  */
-class CarpetWorldData extends LegacyWorldData {
+class VanillaWorldData extends LegacyWorldData {
 
-    private static final CarpetWorldData INSTANCE = new CarpetWorldData();
-    private final BiomeRegistry biomeRegistry = new CarpetBiomeRegistry();
+    private static final VanillaWorldData INSTANCE = new VanillaWorldData();
+    private final BiomeRegistry biomeRegistry = new VanillaBiomeRegistry();
 
     /**
      * Create a new instance.
      */
-    CarpetWorldData() {
+    VanillaWorldData() {
     }
 
     @Override
@@ -27,7 +27,7 @@ class CarpetWorldData extends LegacyWorldData {
      *
      * @return an instance
      */
-    public static CarpetWorldData getInstance() {
+    public static VanillaWorldData getInstance() {
         return INSTANCE;
     }
 

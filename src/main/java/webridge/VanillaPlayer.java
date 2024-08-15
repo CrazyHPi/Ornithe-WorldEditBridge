@@ -22,11 +22,11 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 @SuppressWarnings("deprecation")
-class CarpetPlayer extends AbstractPlayerActor {
+class VanillaPlayer extends AbstractPlayerActor {
 
     private final EntityPlayerMP player;
 
-    protected CarpetPlayer(EntityPlayerMP player) {
+    protected VanillaPlayer(EntityPlayerMP player) {
         this.player = player;
         ThreadSafeCache.getInstance().getOnlineIds().add(getUniqueId());
     }
@@ -56,7 +56,7 @@ class CarpetPlayer extends AbstractPlayerActor {
     public Location getLocation() {
         Vector position = new Vector(this.player.posX, this.player.posY, this.player.posZ);
         return new Location(
-                CarpetWorldEdit.inst.getWorld(this.player.world),
+                VanillaWorldEdit.inst.getWorld(this.player.world),
                 position,
                 this.player.cameraYaw,
                 this.player.cameraPitch);
@@ -64,12 +64,12 @@ class CarpetPlayer extends AbstractPlayerActor {
 
     @Override
     public WorldVector getPosition() {
-        return new WorldVector(LocalWorldAdapter.adapt(CarpetWorldEdit.inst.getWorld(this.player.world)), this.player.posX, this.player.posY, this.player.posZ);
+        return new WorldVector(LocalWorldAdapter.adapt(VanillaWorldEdit.inst.getWorld(this.player.world)), this.player.posX, this.player.posY, this.player.posZ);
     }
 
     @Override
     public com.sk89q.worldedit.world.World getWorld() {
-        return CarpetWorldEdit.inst.getWorld(this.player.world);
+        return VanillaWorldEdit.inst.getWorld(this.player.world);
     }
 
     @Override
@@ -95,7 +95,7 @@ class CarpetPlayer extends AbstractPlayerActor {
             send = send + "|" + StringUtil.joinString(params, "|");
         }
         PacketBuffer pb = new PacketBuffer(Unpooled.wrappedBuffer(send.getBytes(WECUIPacketHandler.UTF_8_CHARSET)));
-        SPacketCustomPayload packet = new SPacketCustomPayload(CarpetWorldEdit.CUI_PLUGIN_CHANNEL, pb);
+        SPacketCustomPayload packet = new SPacketCustomPayload(VanillaWorldEdit.CUI_PLUGIN_CHANNEL, pb);
         this.player.connection.sendPacket(packet);
     }
 
@@ -149,7 +149,7 @@ class CarpetPlayer extends AbstractPlayerActor {
             return true;
         }
         int opLevel = WorldEditBridge.minecraftServer.getPlayerList().getOppedPlayers().getPermissionLevel(player.getGameProfile());
-        int requiredOpLevel = CarpetWorldEdit.inst.getConfig().getPermissionLevel(perm);
+        int requiredOpLevel = VanillaWorldEdit.inst.getConfig().getPermissionLevel(perm);
         return opLevel >= requiredOpLevel;
     }
 
