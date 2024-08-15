@@ -31,4 +31,9 @@ public abstract class MinecraftServerMixin {
     private void onTick(CallbackInfo ci) {
         WorldEditBridge.onStartTick();
     }
+
+    @Inject(method = "stopServer", at = @At("HEAD"))
+    private void onServerStop(CallbackInfo ci) {
+        WorldEditBridge.onServerStopped((MinecraftServer) (Object) this);
+    }
 }

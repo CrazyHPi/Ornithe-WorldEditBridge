@@ -67,6 +67,11 @@ public class CarpetWorldEdit {
         
         WorldEdit.getInstance().getPlatformManager().register(platform);
     }
+
+    public void onServerStopped(MinecraftServer server) {
+        firstTick = true;
+        WorldEdit.getInstance().getPlatformManager().unregister(platform);
+    }
     
     public void onStartTick() {
         ThreadSafeCache.getInstance().tickStart();

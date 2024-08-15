@@ -37,6 +37,13 @@ public class WorldEditBridge {
         }
     }
 
+    public static void onServerStopped(MinecraftServer server) {
+        if (minecraftServer != null) {
+            CarpetWorldEdit.inst.onServerStopped(server);
+            minecraftServer = null;
+        }
+    }
+
     public static boolean worldEditEnabled() {
         return worldEditPresent;
     }
