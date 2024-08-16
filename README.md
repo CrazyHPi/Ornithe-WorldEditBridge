@@ -2,7 +2,10 @@
 
 This mod makes [WorldEdit](https://enginehub.org/worldedit) works on Ornithe in Minecraft 1.12, with WorldEdit-CUI support.
 
-This mod loads on [ornithe loader](https://ornithemc.net/). To use this mod, simply download it from [release](https://github.com/CrazyHPi/Ornithe-WorldEditBridge/releases) and put it in `mods` folder.
+This mod loads on [ornithe loader](https://ornithemc.net/).
+To use this mod, simply download it from [modrinth](https://modrinth.com/mod/ornithe-worldeditbridge) and put it in `mods` folder.
+
+GitHub [release](https://github.com/CrazyHPi/Ornithe-WorldEditBridge/releases) is still available tho.
 
 WorldEdit itself is not needed, it's bundled in this mod.
 
