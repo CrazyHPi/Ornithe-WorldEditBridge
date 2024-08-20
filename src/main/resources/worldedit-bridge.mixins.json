@@ -7,6 +7,7 @@
   "plugin": "webridge.mixinplugin.WorldEditBridgePlugin",
   "mixins": [
     "accessors.ChunkProviderServerAccessor",
+    "capturedDrops.BlockMixin",
     "events.CommandHandlerMixin",
     "events.MinecraftServerMixin",
     "events.NetHandlerPlayServerMixin",
