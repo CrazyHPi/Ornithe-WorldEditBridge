@@ -1,10 +1,6 @@
 plugins {
-    id 'maven-publish'
-    id 'fabric-loom' version '1.6-SNAPSHOT'
-    id 'ploceus' version '1.6-SNAPSHOT'
-//    id 'fabric-loom' version '1.4-SNAPSHOT'
-//    id 'ploceus' version '1.4.2'
-    id "com.github.johnrengelman.shadow" version "8.1.0" // for mixin extra shadowJar
+    id 'fabric-loom' version '1.19-SNAPSHOT'
+    id 'ploceus' version '1.19-SNAPSHOT'
 }
 
 base {
@@ -14,31 +10,26 @@ version = "${project.version}+mc${project.minecraft_version}"
 group = project.maven_group
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
     mavenCentral()
     maven { url 'https://jitpack.io' }
+    maven { url 'https://fastdl.crazyh.fun/maven' }
     maven { url 'https://maven.enginehub.org/repo/' }
-}
-
-configurations {
-    implementation.extendsFrom shadow
 }
 
 loom {
     accessWidenerPath = file("src/main/resources/worldedit-bridge.accesswidener")
 }
 
+ploceus {
+    setIntermediaryGeneration(2)
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 //    mappings ploceus.featherMappings(project.feather_build)
     mappings ploceus.mcpMappings("stable", "1.12", "39")
-//    mappings loom.layered {
-//        addLayer ploceus.mcpMappings('stable', '1.12', '39')
-//    }
+    exceptions ploceus.raven(project.raven_build) // remove this line if not using exceptions patches
+    signatures ploceus.sparrow(project.sparrow_build) // remove this line if not using generics patches
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     // worldedit depends, ship in jar
@@ -47,15 +38,6 @@ dependencies {
     include(implementation "com.sk89q:jchronic:0.2.4a")
     include(implementation "com.thoughtworks.paranamer:paranamer:2.6")
     include(implementation "com.sk89q.lib:jlibnoise:1.0.0")
-
-    // mixin extras
-    include(shadow(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixin_extra_version}")))
-}
-
-shadowJar {
-    configurations = [project.configurations.shadow]
-    relocate("com.llamalad7.mixinextras", "worldeditbridge.libs.mixinextras")
-    mergeServiceFiles() // Very important!
 }
 
 processResources {
@@ -64,6 +46,10 @@ processResources {
     filesMatching('fabric.mod.json') {
         expand 'version': version
     }
+}
+
+tasks.named('runClient') {
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(8) }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -89,22 +75,5 @@ java {
 jar {
     from('LICENSE') {
         rename { "${it}_${base.archivesName.get()}" }
-    }
-}
-
-// Configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
     }
 }
