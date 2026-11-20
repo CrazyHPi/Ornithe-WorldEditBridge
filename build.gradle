@@ -2,8 +2,6 @@ plugins {
     id 'maven-publish'
     id 'fabric-loom' version '1.6-SNAPSHOT'
     id 'ploceus' version '1.6-SNAPSHOT'
-//    id 'fabric-loom' version '1.4-SNAPSHOT'
-//    id 'ploceus' version '1.4.2'
     id "com.github.johnrengelman.shadow" version "8.1.0" // for mixin extra shadowJar
 }
 
@@ -14,13 +12,9 @@ version = "${project.version}+mc${project.minecraft_version}"
 group = project.maven_group
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
     mavenCentral()
     maven { url 'https://jitpack.io' }
+    maven { url 'https://fastdl.crazyh.fun/maven' }
     maven { url 'https://maven.enginehub.org/repo/' }
 }
 
@@ -66,6 +60,10 @@ processResources {
     }
 }
 
+tasks.named('runClient') {
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(8) }
+}
+
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = 'UTF-8'
     it.options.release = 8
@@ -106,5 +104,8 @@ publishing {
         // Notice: This block does NOT have the same function as the block in the top level.
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
+        maven {
+            url "$projectDir/publish"
+        }
     }
 }
