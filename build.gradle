@@ -35,7 +35,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     // worldedit depends, ship in jar
     // not likely to change, so they just stay here
-    include(implementation "com.sk89q.worldedit:worldedit-core:6.1")
+    include(implementation "com.sk89q.worldedit:worldedit-core:6.1.11")
     include(implementation "com.sk89q:jchronic:0.2.4a")
     include(implementation "com.thoughtworks.paranamer:paranamer:2.6")
     include(implementation "com.sk89q.lib:jlibnoise:1.0.0")

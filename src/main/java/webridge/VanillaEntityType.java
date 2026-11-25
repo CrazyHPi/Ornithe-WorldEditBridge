@@ -8,6 +8,7 @@ import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -108,5 +109,10 @@ class VanillaEntityType implements EntityType {
     @Override
     public boolean isArmorStand() {
         return entity instanceof EntityArmorStand;
+    }
+
+    @Override
+    public boolean isPasteable() {
+        return !(entity instanceof EntityPlayerMP || entity instanceof MultiPartEntityPart);
     }
 }
