@@ -1,5 +1,6 @@
 package webridge;
 
+import com.google.common.io.Files;
 import com.sk89q.jnbt.CompoundTag;
 import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.blocks.BaseBlock;
@@ -8,6 +9,7 @@ import com.sk89q.worldedit.blocks.LazyBlock;
 import com.sk89q.worldedit.entity.BaseEntity;
 import com.sk89q.worldedit.entity.Entity;
 import com.sk89q.worldedit.internal.Constants;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldedit.util.TreeGenerator.TreeType;
@@ -23,19 +25,24 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import net.minecraft.world.gen.ChunkProviderServer;
 import webridge.mixins.accessors.ChunkProviderServerAccessor;
+import webridge.mixins.accessors.MinecraftServerAccessor;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -205,109 +212,44 @@ class VanillaWorld extends AbstractWorld {
 
     @Override
     public boolean regenerate(Region region, EditSession editSession) {
-        BaseBlock[] history = new BaseBlock[256 * (getMaxY() + 1)];
-
-        for (Vector2D chunk : region.getChunks()) {
-            Vector min = new Vector(chunk.getBlockX() * 16, 0, chunk.getBlockZ() * 16);
-
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < getMaxY() + 1; y++) {
-                    for (int z = 0; z < 16; z++) {
-                        Vector pt = min.add(x, y, z);
-                        int index = y * 16 * 16 + z * 16 + x;
-                        history[index] = editSession.getBlock(pt);
-                    }
-                }
-            }
-            try {
-                Set<Vector2D> chunks = region.getChunks();
-                IChunkProvider provider = getWorld().getChunkProvider();
-                if (!(provider instanceof ChunkProviderServer)) {
-                    return false;
-                }
-                ChunkProviderServer chunkServer = (ChunkProviderServer) provider;
-                /*
-                Field u;
-                try {
-                    u = ChunkProviderServer.class.getDeclaredField("field_73248_b"); // chunksToUnload
-                } catch(NoSuchFieldException e) {
-                    u = ChunkProviderServer.class.getDeclaredField("chunksToUnload");
-                }
-                u.setAccessible(true);
-                */
-                Set<Long> unloadQueue = ((ChunkProviderServerAccessor) chunkServer).getDroppedChunks();
-                /*
-                Field m;
-                try {
-                    m = ChunkProviderServer.class.getDeclaredField("field_73244_f"); // loadedChunkHashMap
-                } catch(NoSuchFieldException e) {
-                    m = ChunkProviderServer.class.getDeclaredField("loadedChunkHashMap");
-                }
-                m.setAccessible(true);
-                */
-                Long2ObjectMap<Chunk> loadedMap = ((ChunkProviderServerAccessor) chunkServer).getLoadedChunks();
-                /*
-                Field lc;
-                try {
-                    lc = ChunkProviderServer.class.getDeclaredField("field_73245_g"); // loadedChunkHashMap
-                } catch(NoSuchFieldException e) {
-                    lc = ChunkProviderServer.class.getDeclaredField("loadedChunks");
-                }
-                lc.setAccessible(true);
-                @SuppressWarnings("unchecked") List<Chunk> loaded = (List<Chunk>) lc.get(chunkServer);
-                */
-                /*
-                Field p;
-                try {
-                    p = ChunkProviderServer.class.getDeclaredField("field_73246_d"); // currentChunkProvider
-                } catch(NoSuchFieldException e) {
-                    p = ChunkProviderServer.class.getDeclaredField("currentChunkProvider");
-                }
-                p.setAccessible(true);
-                */
-                //IChunkGenerator chunkProvider = chunkServer.chunkGenerator;
-
-                for (Vector2D coord : chunks) {
-                    long pos = ChunkPos.asLong(coord.getBlockX(), coord.getBlockZ());
-                    Chunk mcChunk;
-                    if (chunkServer.chunkExists(coord.getBlockX(), coord.getBlockZ())) {
-                        mcChunk = chunkServer.loadChunk(coord.getBlockX(), coord.getBlockZ());
-                        mcChunk.onUnload();
-                    }
-                    unloadQueue.remove(pos);
-                    loadedMap.remove(pos);
-                    mcChunk = chunkServer.provideChunk(coord.getBlockX(), coord.getBlockZ());
-                    loadedMap.put(pos, mcChunk);
-                    //loaded.add(mcChunk);
-                    /*
-                    if (mcChunk != null) {
-                        mcChunk.onChunkLoad();
-                        mcChunk.populateChunk(chunkProvider, chunkProvider, coord.getBlockX(), coord.getBlockZ());
-                    }
-                    */
-                }
-            } catch (Throwable t) {
-                logger.log(Level.WARNING, "Failed to generate chunk", t);
-                return false;
-            }
-
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < getMaxY() + 1; y++) {
-                    for (int z = 0; z < 16; z++) {
-                        Vector pt = min.add(x, y, z);
-                        int index = y * 16 * 16 + z * 16 + x;
-
-                        if (!region.contains(pt))
-                            editSession.smartSetBlock(pt, history[index]);
-                        else {
-                            editSession.rememberChange(pt, history[index], editSession.rawGetBlock(pt));
-                        }
-                    }
-                }
-            }
+        // Don't even try to regen if it's going to fail.
+        IChunkProvider provider = getWorld().getChunkProvider();
+        if (!(provider instanceof ChunkProviderServer)) {
+            return false;
         }
 
-        return false;
+        File saveFolder = Files.createTempDir();
+        // register this just in case something goes wrong
+        // normally it should be deleted at the end of this method
+        saveFolder.deleteOnExit();
+
+        WorldServer originalWorld = (WorldServer) getWorld();
+
+        MinecraftServer server = originalWorld.getMinecraftServer();
+        AnvilSaveHandler saveHandler = new AnvilSaveHandler(saveFolder,
+                originalWorld.getSaveHandler().getWorldDirectory().getName(), true, ((MinecraftServerAccessor) server).getDataFixer());
+        World freshWorld = new WorldServer(server, saveHandler, originalWorld.getWorldInfo(),
+                originalWorld.provider.getDimensionType().getId(), originalWorld.profiler).init();
+
+        // Pre-gen all the chunks
+        // We need to also pull one more chunk in every direction
+        CuboidRegion expandedPreGen = new CuboidRegion(region.getMinimumPoint().subtract(16, 0, 16), region.getMaximumPoint().add(16, 0, 16));
+        for (Vector2D chunk : expandedPreGen.getChunks()) {
+            freshWorld.getChunk(chunk.getBlockX(), chunk.getBlockZ());
+        }
+
+        VanillaWorld from = new VanillaWorld(freshWorld);
+        try {
+            for (BlockVector vec : region) {
+                editSession.setBlock(vec, from.getBlock(vec));
+            }
+        } catch (MaxChangedBlocksException e) {
+            throw new RuntimeException(e);
+        } finally {
+            saveFolder.delete();
+        }
+
+        return true;
     }
 
     @Override
