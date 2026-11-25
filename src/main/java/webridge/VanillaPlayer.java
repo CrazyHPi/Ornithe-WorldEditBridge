@@ -58,8 +58,8 @@ class VanillaPlayer extends AbstractPlayerActor {
         return new Location(
                 VanillaWorldEdit.inst.getWorld(this.player.world),
                 position,
-                this.player.cameraYaw,
-                this.player.cameraPitch);
+                this.player.rotationYaw,
+                this.player.rotationPitch);
     }
 
     @Override
@@ -129,7 +129,7 @@ class VanillaPlayer extends AbstractPlayerActor {
 
     @Override
     public void setPosition(Vector pos, float pitch, float yaw) {
-        this.player.connection.setPlayerLocation(pos.getX(), pos.getY(), pos.getZ(), pitch, yaw);
+        this.player.connection.setPlayerLocation(pos.getX(), pos.getY(), pos.getZ(), yaw, pitch);
     }
 
     @Override

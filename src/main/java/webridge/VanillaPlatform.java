@@ -69,6 +69,7 @@ class VanillaPlatform extends AbstractPlatform implements MultiUserPlatform {
 
     @Override
     public void reload() {
+        getConfiguration().load();
     }
 
     @Override
@@ -142,7 +143,7 @@ class VanillaPlatform extends AbstractPlatform implements MultiUserPlatform {
 
     @Override
     public String getPlatformName() {
-        return "CarpetMod";
+        return "OrnitheWorldEditBridge";
     }
 
     @Override
